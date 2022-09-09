@@ -1,6 +1,8 @@
 // import packages
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import fs from 'fs';
+import fetch from 'node-fetch';
 import pretty from 'pretty';
 
 const url = 'https://memegen-link-examples-upleveled.netlify.app/';
@@ -28,7 +30,28 @@ async function scrapeData() {
 
     // new array with 10 img
     const firstTenImg = urlImg.slice(0, 10);
-    console.log(firstTenImg);
+    // console.log(firstTenImg);
+
+    // const tempurl = firstTenImg[0];
+
+    // download img from strings
+    async function download() {
+      // loop for downloading 10 img and rename everyone
+      for (let i = 0; i < 10; i++) {
+        const tempurl = firstTenImg[i];
+
+        const response = await fetch(tempurl);
+        // console.log(response);
+
+        const buffer = await response.buffer();
+
+        fs.writeFile(`./memes/0${i + 1}.jpg`, buffer, () =>
+          console.log('sucssesfull downloading!'),
+        );
+      }
+    }
+
+    download();
   } catch (err) {
     console.error(err);
   }
@@ -36,7 +59,7 @@ async function scrapeData() {
 
 scrapeData();
 
-// scrapeData();
+// just example
 
 /* async function scrapeData() {
   try {
